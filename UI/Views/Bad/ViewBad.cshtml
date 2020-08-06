@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Infrastructure.Bad>
+
+@{
+    ViewBag.Title = "ViewBad";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Infrastructure.Voyage voyage = ViewData["voyInfos"] as Infrastructure.Voyage;
+}
+
+<h2>LIST OF DO IN VOYAGE @voyage.VoyageNumber</h2>
+<p>
+    @Html.ActionLink("Back", "Index", "Voyage", null, new { @class = "btn btn-secondary" })
+    @Html.ActionLink("Add New DO", "Create", "Bad", new { id = voyage.VoyageID }, new { @class = "btn btn-primary" })
+</p>
+
+<div id="msg-alert">
+    <button type="button" class="close" data-dismiss="alert">x</button>
+    <strong><span id="isSuccess"></span>! </strong> <span id="message"></span>
+</div>
+
+<table id="tbBad" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>DO PDF</th>
+            <th>
+                @Html.DisplayNameFor(model => model.BLNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateEmission)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateValidite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustomerPhoneNumber)
+            </th>
+            <th>
+                Number of Container
+            </th>
+
+            <th>Container</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @if (item.PDF != null)
+                    {
+                        @Html.ActionLink(" ", "DownLoadDoFile", "Bad", new { id = item.BadID }, new { @class = "fa fa-file-pdf-o" })
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.BLNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateEmission)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateValidite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustomerPhoneNumber)
+                </td>
+                <td>
+                    @item.CountContainer
+                </td>
+
+                <td>
+                    @if (item.Status != true)
+                    {
+                        @Html.ActionLink("Add", "Create", "Container", new { id = item.BadID }, new { @id = "createContainer", @class = "btn btn-primary" })
+                    }
+                    @if (item.CountContainer > 0)
+                    {
+                        <button type="button" class="btn btn-secondary" disabled="@item.Status" id="btnSaveAndSend" onclick="btnSaveAndSend(@item.BadID)">Save &amp; Send</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Save and send</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Password</label>
+                        <input type="password" class="form-control" id="inputPassword">
+                        <input type="hidden" class="form-control" id="badID">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSaveAndSend" onclick="submitConfirmSaveAndSend()">Confirmation</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datatableBootstrap")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+
+}

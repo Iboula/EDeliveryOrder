@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="db8576f9a5144719bc15ab9bd21b4a57" Name="Diagram1">
+        <EntityTypeShape EntityType="BADModel.Bad" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="BADModel.Container" Width="1.5" PointX="7.5" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BADModel.Port" Width="1.5" PointX="0.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BADModel.ShippingLine" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BADModel.Voyage" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <AssociationConnector Association="BADModel.FK_Bad_Voyage" ManuallyRouted="false" />
+        <AssociationConnector Association="BADModel.FK_Container_Bad" ManuallyRouted="false" />
+        <AssociationConnector Association="BADModel.FK_Voyage_POD" ManuallyRouted="false" />
+        <AssociationConnector Association="BADModel.FK_Voyage_POF" ManuallyRouted="false" />
+        <AssociationConnector Association="BADModel.FK_Voyage_POL" ManuallyRouted="false" />
+        <AssociationConnector Association="BADModel.FK_Voyage_POR" ManuallyRouted="false" />
+        <AssociationConnector Association="BADModel.FK_Voyage_ShippingLine" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

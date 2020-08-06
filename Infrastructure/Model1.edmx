@@ -1,0 +1,503 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="BADModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Bad">
+          <Key>
+            <PropertyRef Name="BadID" />
+          </Key>
+          <Property Name="BadID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BLNumber" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="DateEmission" Type="datetime" />
+          <Property Name="DateValidite" Type="datetime" />
+          <Property Name="CustomerNinea" Type="varchar" MaxLength="15" />
+          <Property Name="CustomerName" Type="varchar" MaxLength="250" />
+          <Property Name="CustomerPhoneNumber" Type="varchar" MaxLength="20" />
+          <Property Name="CustomerEmail" Type="varchar" MaxLength="80" />
+          <Property Name="CustomerAddress" Type="varchar" MaxLength="250" />
+          <Property Name="PDF" Type="varbinary(max)" />
+          <Property Name="ShipperName" Type="varchar" MaxLength="250" />
+          <Property Name="ShipperAddress" Type="varchar" MaxLength="250" />
+          <Property Name="ConsigneeName" Type="varchar" MaxLength="250" />
+          <Property Name="ConsigneeAddress" Type="varchar" MaxLength="250" />
+          <Property Name="NotifyParty" Type="varchar" MaxLength="250" />
+          <Property Name="VoyageID" Type="int" />
+          <Property Name="Status" Type="bit" />
+        </EntityType>
+        <EntityType Name="Container">
+          <Key>
+            <PropertyRef Name="ContainerID" />
+          </Key>
+          <Property Name="ContainerID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BadID" Type="int" />
+          <Property Name="ContainerNumber" Type="varchar" MaxLength="20" />
+          <Property Name="ContainerSize" Type="int" />
+          <Property Name="ContainerType" Type="varchar" MaxLength="10" />
+          <Property Name="ContainerTare" Type="decimal" Precision="18" Scale="0" />
+          <Property Name="CargoWeight" Type="decimal" Precision="18" Scale="0" />
+        </EntityType>
+        <EntityType Name="Port">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CODE" Type="char" MaxLength="5" />
+          <Property Name="NOM" Type="varchar" MaxLength="40" />
+          <Property Name="PAYS" Type="char" MaxLength="2" />
+        </EntityType>
+        <EntityType Name="ShippingLine">
+          <Key>
+            <PropertyRef Name="ShippingLineID" />
+          </Key>
+          <Property Name="ShippingLineID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="20" />
+          <Property Name="Password" Type="varchar" MaxLength="255" />
+          <Property Name="Sigle" Type="varchar" MaxLength="10" />
+          <Property Name="Name" Type="varchar" MaxLength="250" />
+        </EntityType>
+        <EntityType Name="Voyage">
+          <Key>
+            <PropertyRef Name="VoyageID" />
+          </Key>
+          <Property Name="VoyageID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ShippingLineID" Type="int" />
+          <Property Name="PortOfLoading" Type="int" />
+          <Property Name="PortOfDischarge" Type="int" />
+          <Property Name="PortOfFinalPlaceOfDevlivery" Type="int" />
+          <Property Name="PortOfRecept" Type="int" />
+          <Property Name="VesselName" Type="varchar" MaxLength="250" />
+          <Property Name="VoyageNumber" Type="varchar" MaxLength="20" />
+          <Property Name="ETD" Type="datetime" />
+          <Property Name="ETA" Type="datetime" />
+        </EntityType>
+        <Association Name="FK_Bad_Voyage">
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="0..1" />
+          <End Role="Bad" Type="Self.Bad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Voyage">
+              <PropertyRef Name="VoyageID" />
+            </Principal>
+            <Dependent Role="Bad">
+              <PropertyRef Name="VoyageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Container_Bad">
+          <End Role="Bad" Type="Self.Bad" Multiplicity="0..1" />
+          <End Role="Container" Type="Self.Container" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bad">
+              <PropertyRef Name="BadID" />
+            </Principal>
+            <Dependent Role="Container">
+              <PropertyRef Name="BadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POD">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfDischarge" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POF">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfFinalPlaceOfDevlivery" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POL">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfLoading" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POR">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfRecept" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_ShippingLine">
+          <End Role="ShippingLine" Type="Self.ShippingLine" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShippingLine">
+              <PropertyRef Name="ShippingLineID" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="ShippingLineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BADModelStoreContainer">
+          <EntitySet Name="Bad" EntityType="Self.Bad" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Container" EntityType="Self.Container" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Port" EntityType="Self.Port" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ShippingLine" EntityType="Self.ShippingLine" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Voyage" EntityType="Self.Voyage" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Bad_Voyage" Association="Self.FK_Bad_Voyage">
+            <End Role="Voyage" EntitySet="Voyage" />
+            <End Role="Bad" EntitySet="Bad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Container_Bad" Association="Self.FK_Container_Bad">
+            <End Role="Bad" EntitySet="Bad" />
+            <End Role="Container" EntitySet="Container" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POD" Association="Self.FK_Voyage_POD">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POF" Association="Self.FK_Voyage_POF">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POL" Association="Self.FK_Voyage_POL">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POR" Association="Self.FK_Voyage_POR">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_ShippingLine" Association="Self.FK_Voyage_ShippingLine">
+            <End Role="ShippingLine" EntitySet="ShippingLine" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BADModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Bad">
+          <Key>
+            <PropertyRef Name="BadID" />
+          </Key>
+          <Property Name="BadID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BLNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateEmission" Type="DateTime" Precision="3" />
+          <Property Name="DateValidite" Type="DateTime" Precision="3" />
+          <Property Name="CustomerNinea" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerPhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerEmail" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="CustomerAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="PDF" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="ShipperName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ShipperAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ConsigneeName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="ConsigneeAddress" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="NotifyParty" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="VoyageID" Type="Int32" />
+          <Property Name="Status" Type="Boolean" />
+          <NavigationProperty Name="Voyage" Relationship="Self.FK_Bad_Voyage" FromRole="Bad" ToRole="Voyage" />
+          <NavigationProperty Name="Container" Relationship="Self.FK_Container_Bad" FromRole="Bad" ToRole="Container" />
+        </EntityType>
+        <EntityType Name="Container">
+          <Key>
+            <PropertyRef Name="ContainerID" />
+          </Key>
+          <Property Name="ContainerID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BadID" Type="Int32" />
+          <Property Name="ContainerNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ContainerSize" Type="Int32" />
+          <Property Name="ContainerType" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="ContainerTare" Type="Decimal" Precision="18" Scale="0" />
+          <Property Name="CargoWeight" Type="Decimal" Precision="18" Scale="0" />
+          <NavigationProperty Name="Bad" Relationship="Self.FK_Container_Bad" FromRole="Container" ToRole="Bad" />
+        </EntityType>
+        <EntityType Name="Port">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CODE" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="NOM" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+          <Property Name="PAYS" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="Voyage" Relationship="Self.FK_Voyage_POD" FromRole="Port" ToRole="Voyage" />
+          <NavigationProperty Name="Voyage1" Relationship="Self.FK_Voyage_POF" FromRole="Port" ToRole="Voyage" />
+          <NavigationProperty Name="Voyage2" Relationship="Self.FK_Voyage_POL" FromRole="Port" ToRole="Voyage" />
+          <NavigationProperty Name="Voyage3" Relationship="Self.FK_Voyage_POR" FromRole="Port" ToRole="Voyage" />
+        </EntityType>
+        <EntityType Name="ShippingLine">
+          <Key>
+            <PropertyRef Name="ShippingLineID" />
+          </Key>
+          <Property Name="ShippingLineID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Login" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="Password" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Sigle" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Voyage" Relationship="Self.FK_Voyage_ShippingLine" FromRole="ShippingLine" ToRole="Voyage" />
+        </EntityType>
+        <EntityType Name="Voyage">
+          <Key>
+            <PropertyRef Name="VoyageID" />
+          </Key>
+          <Property Name="VoyageID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ShippingLineID" Type="Int32" />
+          <Property Name="PortOfLoading" Type="Int32" />
+          <Property Name="PortOfDischarge" Type="Int32" />
+          <Property Name="PortOfFinalPlaceOfDevlivery" Type="Int32" />
+          <Property Name="PortOfRecept" Type="Int32" />
+          <Property Name="VesselName" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="VoyageNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="ETD" Type="DateTime" Precision="3" />
+          <Property Name="ETA" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Bad" Relationship="Self.FK_Bad_Voyage" FromRole="Voyage" ToRole="Bad" />
+          <NavigationProperty Name="Port" Relationship="Self.FK_Voyage_POD" FromRole="Voyage" ToRole="Port" />
+          <NavigationProperty Name="Port1" Relationship="Self.FK_Voyage_POF" FromRole="Voyage" ToRole="Port" />
+          <NavigationProperty Name="Port2" Relationship="Self.FK_Voyage_POL" FromRole="Voyage" ToRole="Port" />
+          <NavigationProperty Name="Port3" Relationship="Self.FK_Voyage_POR" FromRole="Voyage" ToRole="Port" />
+          <NavigationProperty Name="ShippingLine" Relationship="Self.FK_Voyage_ShippingLine" FromRole="Voyage" ToRole="ShippingLine" />
+        </EntityType>
+        <Association Name="FK_Bad_Voyage">
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="0..1" />
+          <End Role="Bad" Type="Self.Bad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Voyage">
+              <PropertyRef Name="VoyageID" />
+            </Principal>
+            <Dependent Role="Bad">
+              <PropertyRef Name="VoyageID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Container_Bad">
+          <End Role="Bad" Type="Self.Bad" Multiplicity="0..1" />
+          <End Role="Container" Type="Self.Container" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Bad">
+              <PropertyRef Name="BadID" />
+            </Principal>
+            <Dependent Role="Container">
+              <PropertyRef Name="BadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POD">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfDischarge" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POF">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfFinalPlaceOfDevlivery" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POL">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfLoading" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_POR">
+          <End Role="Port" Type="Self.Port" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Port">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="PortOfRecept" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Voyage_ShippingLine">
+          <End Role="ShippingLine" Type="Self.ShippingLine" Multiplicity="0..1" />
+          <End Role="Voyage" Type="Self.Voyage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ShippingLine">
+              <PropertyRef Name="ShippingLineID" />
+            </Principal>
+            <Dependent Role="Voyage">
+              <PropertyRef Name="ShippingLineID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BADEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Bad" EntityType="Self.Bad" />
+          <EntitySet Name="Container" EntityType="Self.Container" />
+          <EntitySet Name="Port" EntityType="Self.Port" />
+          <EntitySet Name="ShippingLine" EntityType="Self.ShippingLine" />
+          <EntitySet Name="Voyage" EntityType="Self.Voyage" />
+          <AssociationSet Name="FK_Bad_Voyage" Association="Self.FK_Bad_Voyage">
+            <End Role="Voyage" EntitySet="Voyage" />
+            <End Role="Bad" EntitySet="Bad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Container_Bad" Association="Self.FK_Container_Bad">
+            <End Role="Bad" EntitySet="Bad" />
+            <End Role="Container" EntitySet="Container" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POD" Association="Self.FK_Voyage_POD">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POF" Association="Self.FK_Voyage_POF">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POL" Association="Self.FK_Voyage_POL">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_POR" Association="Self.FK_Voyage_POR">
+            <End Role="Port" EntitySet="Port" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Voyage_ShippingLine" Association="Self.FK_Voyage_ShippingLine">
+            <End Role="ShippingLine" EntitySet="ShippingLine" />
+            <End Role="Voyage" EntitySet="Voyage" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BADModelStoreContainer" CdmEntityContainer="BADEntities">
+          <EntitySetMapping Name="Bad">
+            <EntityTypeMapping TypeName="BADModel.Bad">
+              <MappingFragment StoreEntitySet="Bad">
+                <ScalarProperty Name="BadID" ColumnName="BadID" />
+                <ScalarProperty Name="BLNumber" ColumnName="BLNumber" />
+                <ScalarProperty Name="DateEmission" ColumnName="DateEmission" />
+                <ScalarProperty Name="DateValidite" ColumnName="DateValidite" />
+                <ScalarProperty Name="CustomerNinea" ColumnName="CustomerNinea" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="CustomerPhoneNumber" ColumnName="CustomerPhoneNumber" />
+                <ScalarProperty Name="CustomerEmail" ColumnName="CustomerEmail" />
+                <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />
+                <ScalarProperty Name="PDF" ColumnName="PDF" />
+                <ScalarProperty Name="ShipperName" ColumnName="ShipperName" />
+                <ScalarProperty Name="ShipperAddress" ColumnName="ShipperAddress" />
+                <ScalarProperty Name="ConsigneeName" ColumnName="ConsigneeName" />
+                <ScalarProperty Name="ConsigneeAddress" ColumnName="ConsigneeAddress" />
+                <ScalarProperty Name="NotifyParty" ColumnName="NotifyParty" />
+                <ScalarProperty Name="VoyageID" ColumnName="VoyageID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Container">
+            <EntityTypeMapping TypeName="BADModel.Container">
+              <MappingFragment StoreEntitySet="Container">
+                <ScalarProperty Name="ContainerID" ColumnName="ContainerID" />
+                <ScalarProperty Name="BadID" ColumnName="BadID" />
+                <ScalarProperty Name="ContainerNumber" ColumnName="ContainerNumber" />
+                <ScalarProperty Name="ContainerSize" ColumnName="ContainerSize" />
+                <ScalarProperty Name="ContainerType" ColumnName="ContainerType" />
+                <ScalarProperty Name="ContainerTare" ColumnName="ContainerTare" />
+                <ScalarProperty Name="CargoWeight" ColumnName="CargoWeight" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Port">
+            <EntityTypeMapping TypeName="BADModel.Port">
+              <MappingFragment StoreEntitySet="Port">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="CODE" ColumnName="CODE" />
+                <ScalarProperty Name="NOM" ColumnName="NOM" />
+                <ScalarProperty Name="PAYS" ColumnName="PAYS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ShippingLine">
+            <EntityTypeMapping TypeName="BADModel.ShippingLine">
+              <MappingFragment StoreEntitySet="ShippingLine">
+                <ScalarProperty Name="ShippingLineID" ColumnName="ShippingLineID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Sigle" ColumnName="Sigle" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Voyage">
+            <EntityTypeMapping TypeName="BADModel.Voyage">
+              <MappingFragment StoreEntitySet="Voyage">
+                <ScalarProperty Name="VoyageID" ColumnName="VoyageID" />
+                <ScalarProperty Name="ShippingLineID" ColumnName="ShippingLineID" />
+                <ScalarProperty Name="PortOfLoading" ColumnName="PortOfLoading" />
+                <ScalarProperty Name="PortOfDischarge" ColumnName="PortOfDischarge" />
+                <ScalarProperty Name="PortOfFinalPlaceOfDevlivery" ColumnName="PortOfFinalPlaceOfDevlivery" />
+                <ScalarProperty Name="PortOfRecept" ColumnName="PortOfRecept" />
+                <ScalarProperty Name="VesselName" ColumnName="VesselName" />
+                <ScalarProperty Name="VoyageNumber" ColumnName="VoyageNumber" />
+                <ScalarProperty Name="ETD" ColumnName="ETD" />
+                <ScalarProperty Name="ETA" ColumnName="ETA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

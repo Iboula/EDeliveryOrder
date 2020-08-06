@@ -1,0 +1,282 @@
+﻿@model Infrastructure.Bad
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    IEnumerable<Infrastructure.Bad> bad = ViewData["bad"] as IEnumerable<Infrastructure.Bad>;
+    Infrastructure.Voyage voy = ViewData["voy"] as Infrastructure.Voyage;
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div id="bad-alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong><span id="isSuccess">Success</span>! </strong> <span id="message">@TempData["SuccessMsg"].ToString()</span>
+    </div>
+}
+
+<h2>New DO in Voyage number @voy.VoyageNumber</h2>
+
+@using (Html.BeginForm("Create", "Bad", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row pb-2">
+            <div class="card col-12">
+                <div class="card-body">
+                    <h5 class="card-title">DO Info</h5>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.BLNumber, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.BLNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.BLNumber, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DateEmission, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DateEmission, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DateEmission, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DateValidite, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DateValidite, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.DateValidite, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row pb-2">
+            <div class="card col-12">
+                <div class="card-body">
+                    <h5 class="card-title">Customer Info</h5>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CustomerNinea, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.CustomerNinea, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CustomerNinea, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CustomerName, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.CustomerName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CustomerName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CustomerPhoneNumber, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.CustomerPhoneNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CustomerPhoneNumber, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CustomerEmail, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.CustomerEmail, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CustomerEmail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.CustomerAddress, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.CustomerAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.CustomerAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="row pb-2">
+            <div class="card col-12">
+                <div class="card-body">
+                    <h5 class="card-title">Shipper Info</h5>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.PdfFile, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.TextBoxFor(model => model.PdfFile, "", new { @type = "file" })
+                                    <br />
+                                    @Html.ValidationMessageFor(model => model.PdfFile, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShipperName, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ShipperName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ShipperName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ShipperAddress, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ShipperAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ShipperAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ConsigneeName, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ConsigneeName, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ConsigneeName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.ConsigneeAddress, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.ConsigneeAddress, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.ConsigneeAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.NotifyParty, htmlAttributes: new { @class = "control-label col-md-8" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.NotifyParty, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.NotifyParty, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10 pt-2">
+            <input type="submit" value="Save" class="btn btn-success" />
+            @Html.ActionLink("Back", "Index", "Voyage", null, new { @class = "btn btn-secondary" })
+        </div>
+    </div>
+
+    <h3>List of Container in @voy.VoyageNumber</h3>
+    <div>
+        <table id="tbGeneric" class="table table-striped table-bordered" style="width:100%">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.BLNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateEmission)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DateValidite)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerNinea)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerPhoneNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerEmail)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CustomerAddress)
+                    </th>
+
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in bad)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.BLNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateEmission)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateValidite)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerNinea)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerPhoneNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerEmail)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CustomerAddress)
+                        </td>
+
+                        <td>
+                            @Html.ActionLink("Ajouter Container", "Create", "Container", new { id = item.BadID }, new { @class = "btn btn-primary" })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datatableBootstrap")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+}

@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Infrastructure.Voyage>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Infrastructure.Voyage voyages = new Infrastructure.Voyage();
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div id="voy-alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong><span id="isSuccess">Success</span>! </strong> <span id="message">@TempData["SuccessMsg"].ToString()</span>
+    </div>
+}
+
+<p>
+    @Html.ActionLink("New Voyage", "Create", "Voyage", null, new { @class = "btn btn-success" })
+</p>
+
+<h2>List Voyage</h2>
+<table id="tbGeneric" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.VoyageNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VesselName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ETD)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ETA)
+            </th>
+            <th>
+                @Html.DisplayName("POD")
+            </th>
+            <th>
+                @Html.DisplayName("POL")
+            </th>
+            <th>
+                @Html.DisplayName("Port Of Final Place")
+            </th>
+
+            <th>
+                @Html.DisplayName("Port Of Recept")
+            </th>
+            <th>
+                Number of DO
+            </th>
+            <th>
+                Delivery Order
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.ActionLink(item.VoyageNumber, "Edit", "Voyage", new { id = item.VoyageID }, null)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VesselName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ETD)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ETA)
+            </td>
+            <td>
+                <span data-toggle="tooltip" title="@item.Port.NOM">@Html.DisplayFor(modelItem => item.Port.CODE, null)</span>
+            </td>
+            <td>
+                <span data-toggle="tooltip" title="@item.Port.NOM">@Html.DisplayFor(modelItem => item.Port2.CODE)</span>
+            </td>
+            <td>
+                <span data-toggle="tooltip" title="@item.Port.NOM">@Html.DisplayFor(modelItem => item.Port1.CODE)</span>
+            </td>
+
+            <td>
+                <span data-toggle="tooltip" title="@item.Port.NOM">@Html.DisplayFor(modelItem => item.Port3.CODE)</span>
+            </td>
+            <td>
+                @Html.ActionLink(item.CountBad.ToString(), "ViewBad", "Bad", new { id = item.VoyageID }, null)
+            </td>
+            <td>
+                <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group mr-2" role="group" aria-label="First group">
+                        @Html.ActionLink("Add", "Create", "Bad", new { id = item.VoyageID }, new { @class = "btn btn-primary" })
+                    </div>
+                    <div class="btn-group mr-2" role="group" aria-label="Second group">
+                        @Html.ActionLink("View", "ViewBad", "Bad", new { id = item.VoyageID }, new { @class = "btn btn-success" })
+                    </div>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
+<div class="modal" tabindex="-1" role="dialog" id="form-modal">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datatableBootstrap")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/scripts")
+}

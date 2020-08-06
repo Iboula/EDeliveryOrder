@@ -1,0 +1,13 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Login", FormMethod.Post, new { id = "logoutForm", @class = "navbar-nav ml-auto" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="navbar-nav ml-auto">
+            <span class="nav-item nav-link text-white"><strong>@Session["Name"]</strong></span>
+            <a class="nav-item nav-link" href="javascript:document.getElementById('logoutForm').submit()">Se déconnecter</a>
+        </div>
+    }
+}

@@ -1,0 +1,81 @@
+﻿@model Infrastructure.ShippingLine
+@using BotDetect.Web.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    MvcCaptcha loginCaptcha = new MvcCaptcha("LoginCaptcha");
+    loginCaptcha.UserInputID = "CaptchaCode";
+    loginCaptcha.SoundEnabled = false;
+    loginCaptcha.HelpLinkEnabled = false;
+}
+
+@if (TempData["ErrorMsg"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @TempData["ErrorMsg"].ToString()
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+<style>
+
+    .captcha-box {
+        border-radius: 5px;
+        padding: 5px;
+        max-width: 300px;
+        margin: 20px 0;
+        background-color: #fafafa;
+    }
+
+    #canvas {
+        width: 200px;
+        height: 60px;
+    }
+</style>
+
+<div id="login">
+    <h3 class="text-center text-white pt-5">Login form</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    @using (Html.BeginForm("Index", "Login", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @*<h3 class="text-center text-info">Login</h3>*@
+                        <img src="~/Content/Images/logo.png" class="rounded pb-2" alt="">
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Login, htmlAttributes: new { @class = "text-info" })
+                            @Html.EditorFor(model => model.Login, new { htmlAttributes = new { name = "username", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Login, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "text-info" })
+                            @Html.EditorFor(model => model.Password, new { htmlAttributes = new { name = "pass", @type = "password", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.Captcha(loginCaptcha)
+                            @Html.TextBox("CaptchaCode")
+                            @Html.ValidationMessageFor(model => model.CaptchaCode, "", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group pt-5">
+                            <input type="submit" id="btnLogin" name="connexion" class="btn btn-lg btn-block btn-info btn-md" value="Connexion">
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+}

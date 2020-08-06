@@ -1,0 +1,60 @@
+﻿@using BotDetect.Web.Mvc;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - E-Delivery Order</title>
+    <link href="@BotDetect.Web.CaptchaUrls.Absolute.LayoutStyleSheetUrl"
+          rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;1,100;1,300&display=swap" rel="stylesheet">
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+<style>
+    .dataTables_filter{
+        float: right;
+    }
+</style>
+</head>
+<body>
+
+    <div class="container-fluid pb-4">
+        @*<nav class="navbar navbar-expand-lg navbar-fixed-top navbar-dark bg-dark">*@
+        <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+            @*@Html.ActionLink("E-Delivery Order", "Index", "Voyage", new { area = "" }, new { @class = "navbar-brand" })*@
+            <a class="navbar-brand" href="@Url.Action("Index", "Voyage")">
+                <img src="~/Content/Images/logo.png" class="rounded float-left" width="100" alt=""> E-Delivery Order
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarText">
+                @if (Request.IsAuthenticated)
+                {
+                    <div class="navbar-nav">
+                        @Html.ActionLink("Voyage", "Index", "Voyage", null, new { @class = "nav-item nav-link" })
+                    </div>
+                }
+                @Html.Partial("_LoginPartial")
+            </div>
+        </nav>
+    </div>
+    <div class="container-fluid body-content">
+        @RenderBody()
+    </div>
+
+    <footer id="sticky-footer" class="fixed-bottom">
+        <div class="container text-center">
+            <small>&copy; @DateTime.Now.Year - DP WORLD DAKAR SHIPPING LINE ELECTRONIC DELIVERY ORDER</small>
+        </div>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/jqueryval")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

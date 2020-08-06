@@ -1,0 +1,111 @@
+﻿@model Infrastructure.Container
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@if (TempData["SuccessMsg"] != null)
+{
+    <div id="ct-alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong><span id="isSuccess">Success</span>! </strong> <span id="message">@TempData["SuccessMsg"].ToString()</span>
+    </div>
+}
+
+<h2>New Container</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContainerNumber, htmlAttributes: new { @class = "control-label col-md-8" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ContainerNumber, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ContainerNumber, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContainerSize, htmlAttributes: new { @class = "control-label col-md-8" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("ContainerSize", new List<SelectListItem>
+                                    {
+                                    new SelectListItem { Text = "20'", Value = "20" },
+                                            new SelectListItem { Text = "40'", Value = "40" },
+                                           new SelectListItem { Text = "45'", Value = "45" },
+                                       },
+                                    "Select Container Size",
+                                    new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ContainerSize, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContainerType, htmlAttributes: new { @class = "control-label col-md-8" })
+                            <div class="col-md-10">
+                                @*@Html.EditorFor(model => model.ContainerType, new { htmlAttributes = new { @class = "form-control" } })*@
+                                @Html.DropDownList("ContainerType",
+                                    new SelectList(Enum.GetValues(typeof(Infrastructure.CtType))),
+                                    "Select Container Type",
+                                    new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.ContainerType, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContainerTare, htmlAttributes: new { @class = "control-label col-md-8" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ContainerTare, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ContainerTare, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CargoWeight, htmlAttributes: new { @class = "control-label col-md-8" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CargoWeight, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CargoWeight, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-success" />
+                @Html.ActionLink("Back", "ViewBad", "Bad", new { id = ViewData["voyBad"] }, new { @class = "btn btn-secondary" })
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/datatable")
+    @Scripts.Render("~/bundles/datatableBootstrap")
+    @Scripts.Render("~/bundles/scripts")
+}
